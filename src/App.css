@@ -1,38 +1,53 @@
-.App {
-  text-align: center;
+.paragraph {
+    color: green;
+    word-spacing: 2px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.total-box {
+    background-color: white
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.proceed-butn {
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.product-conatiner {
+    background-color: ivory;
 }
 
-.App-link {
-  color: #61dafb;
+
+.cart {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 20px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+
+.product-head {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 25px;
+    letter-spacing: 1px;
+    word-spacing: 2px;
+}
+
+.cart-page {
+    background-color: oldlace;
+}
+
+.cart-container {
+    background-color: wheat;
+}
+
+
+.cart-title {
+    font-family: 'Times New Roman', Times, serif;
+    margin-top: 6px;
+}
+
+
+
+.cart-item {
+    background-color: white;
 }
