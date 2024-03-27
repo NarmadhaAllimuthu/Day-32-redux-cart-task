@@ -1,11 +1,21 @@
+import { useNavigate } from 'react-router-dom';
 
 
-import React from 'react';
+
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { addToCart, addTotal, addQty, removeFromCart } from './redux/ProductSlice';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import useRazorpay from 'react-razorpay';
 
 function Cart() {
+
+  const [Razorpay] =useRazorpay();
+
+  const [order,setOrder] = useState({});
+  const navigate = useNavigate(); 
+
   const cart = useSelector((state) => state.app.cart);
   const cartTotal = useSelector((state) => state.app.cartTotal);
   const dispatch = useDispatch();
@@ -31,6 +41,63 @@ function Cart() {
     (acc, item) => acc + parseFloat(item.h) * parseFloat(item.quantity),
     0
   );
+
+  const handlePayment = useCallback(()=>{
+    const rzp1 = new Razorpay({...order ,key :"rzp_test_Fh3QriUba3xUn1"});
+    rzp1.open();
+
+  },[Razorpay]);
+
+  useEffect(()=>{
+    if(order.amount){
+      handlePayment();
+    }
+
+  },[order])
+
+const createOrder = async() => {
+  try{
+    const order = {
+      items: cart.map((item) => ({
+        id: item.id,
+        title: item.title,
+        sub: item.sub,
+        img: item.img,
+        h: item.h,
+        quantity: item.quantity,
+      })),
+      amount: total,
+    };
+    // console.log();
+    const orderCreated =await axios.get(`http://localhost:3030/payment/create-order?amount=${order.amount}`);
+    // alert("Order Created");
+    console.log(orderCreated.data);
+    // setOrder(orderCreated.data);
+    let handler =(res)=>{
+      console.log(res);
+      alert("Payment Successfull");
+      
+      navigate("/");
+
+    }
+  
+    let orderValue = orderCreated.data;
+    const rzp1 = new Razorpay({...orderValue ,key :"rzp_test_Fh3QriUba3xUn1",handler});
+    rzp1.open();
+
+
+  }catch(err){
+    console.log(err);
+    alert("Something went wrong");
+  }
+
+}
+
+
+
+
+
+
 
   return (
     <div className="container mt-5 cart-page">
@@ -142,7 +209,10 @@ function Cart() {
           </p>
           <h4 className="text-center">Total Price : {cartTotal.toLocaleString()}</h4>
           <div className="d-grid gap-2">
-            <button className="btn btn-warning proceed-butn mb-5">Proceed to Buy</button>
+            <button 
+            className="btn btn-warning proceed-butn mb-5"
+            onClick={()=>{createOrder()}}
+            >Proceed to Buy</button>
           </div>
         </div>
       </div>
@@ -151,6 +221,16 @@ function Cart() {
 }
 
 export default Cart;
+
+
+
+
+
+
+
+
+
+
 
 
 

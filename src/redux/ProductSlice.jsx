@@ -15,48 +15,75 @@ export const productSlice = createSlice({
     },
 
 
+    // addToCart: (state, action) => {
+    //   const productId = action.payload;
+    //   const item = state.products.find((product) => product.id === productId);
+    //   const existingItemIndex = state.cart.findIndex((cartItem) => cartItem.id === productId);
+
+    //   if (item) {
+    //     if (existingItemIndex !== -1) {
+    //       // If the item already exists in the cart, update the quantity
+    //       state.cart[existingItemIndex].quantity += 1;
+    //     } else {
+    //       // If the item is not in the cart, add it with quantity 1
+    //       state.cart.push({ ...item, quantity: 1 });
+    //     }
+
+    //     // Update cartTotal here based on offer
+    //     if (item.offer) {
+    //       state.cartTotal = state.cart.reduce(
+    //         (acc, item) => acc + parseInt(item.h) * parseInt(item.quantity),
+    //         0
+    //       );
+    //     } else {
+    //       state.cartTotal = state.cart.reduce(
+    //         (acc, item) => acc + parseInt(item.g) * parseInt(item.quantity),
+    //         0
+    //       );
+    //     }
+    //   }
+    // },
+
+
+    // removeFromCart: (state, action) => {
+    //   const productId = action.payload;
+    //   const updatedCart = state.cart.filter((item) => item.id !== productId);
+    //   state.cart = updatedCart;
+
+    //   // Update cartTotal here
+    //   state.cartTotal = state.cart.reduce(
+    //     (acc, item) => acc + parseInt(item.h) * parseInt(item.quantity),
+    //     0
+    //   );
+    // },
     addToCart: (state, action) => {
       const productId = action.payload;
       const item = state.products.find((product) => product.id === productId);
-      const existingItemIndex = state.cart.findIndex((cartItem) => cartItem.id === productId);
-
+    
       if (item) {
-        if (existingItemIndex !== -1) {
-          // If the item already exists in the cart, update the quantity
-          state.cart[existingItemIndex].quantity += 1;
-        } else {
-          // If the item is not in the cart, add it with quantity 1
-          state.cart.push({ ...item, quantity: 1 });
-        }
-
-        // Update cartTotal here based on offer
-        if (item.offer) {
-          state.cartTotal = state.cart.reduce(
-            (acc, item) => acc + parseInt(item.h) * parseInt(item.quantity),
-            0
-          );
-        } else {
-          state.cartTotal = state.cart.reduce(
-            (acc, item) => acc + parseInt(item.g) * parseInt(item.quantity),
-            0
-          );
-        }
+        state.cart.push({ ...item, quantity: 1 });
+    
+        state.cartTotal = state.cart.reduce(
+          (acc, item) => acc + parseInt(item[item.offer ? 'g' : 'h']) * parseInt(item.quantity),
+          0
+        );
       }
     },
-
-
+    
     removeFromCart: (state, action) => {
-      const productId = action.payload;
-      const updatedCart = state.cart.filter((item) => item.id !== productId);
+      const productId = action.payload.id;
+    
+      // Remove the item from the cart
+      const updatedCart = state.cart.filter((item) => item.id === productId);
       state.cart = updatedCart;
-
+    
       // Update cartTotal here
       state.cartTotal = state.cart.reduce(
-        (acc, item) => acc + parseInt(item.h) * parseInt(item.quantity),
+        (acc, item) => acc + parseInt(item[item.offer ? 'h' : 'g']) * parseInt(item.quantity),
         0
       );
     },
-
+    
     addQty: (state, action) => {
       const { id, qty } = action.payload;
       const item = state.cart.find((cartItem) => cartItem.id === id);
