@@ -69,14 +69,14 @@ const createOrder = async() => {
       amount: total,
     };
     // console.log();
-    const orderCreated =await axios.get(`http://localhost:3030/payment/create-order?amount=${order.amount}`);
+    const orderCreated =await axios.get(`https://shop-cart-backend.onrender.com/payment/create-order?amount=${order.amount}`);
     // alert("Order Created");
     console.log(orderCreated.data);
     // setOrder(orderCreated.data);
     let handler =(res)=>{
       console.log(res);
       alert("Payment Successfull");
-      
+
       navigate("/");
 
     }
