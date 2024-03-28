@@ -93,7 +93,43 @@ const createOrder = async() => {
 
 }
 
+const createOrderForSingle = async(id) => {
+  try{
+    const order = {
+      items: cart.map((item) => ({
+        id: item.id,
+        title: item.title,
+        sub: item.sub,
+        img: item.img,
+        h: item.h,
+        quantity: item.quantity,
+      })),
+      amount: total,
+    };
+    // console.log(order);
+    const getItem = order.items.filter((item) => item.id === id );
+    // console.log(getItem[0].h);
+    const orderCreated =await axios.get(`https://shop-cart-backend.onrender.com/payment/create-order?amount=${getItem[0].h}`);
+  
+    let handler =(res)=>{
+      console.log(res);
+      alert("Payment Successfull");
 
+      navigate("/");
+
+    }
+  
+    let orderValue = orderCreated.data;
+    const rzp1 = new Razorpay({...orderValue ,key :"rzp_test_Fh3QriUba3xUn1",handler});
+    rzp1.open();
+
+
+  }catch(err){
+    console.log(err);
+    alert("Something went wrong");
+  }
+
+}
 
 
 
@@ -178,7 +214,8 @@ const createOrder = async() => {
                       </h4>
                     )}
                     <p>{item.description}</p>
-                    <button className="btn btn-primary mb-4 ">
+                    <button className="btn btn-primary mb-4 "
+                    onClick={()=>{createOrderForSingle(item.id)}}>
                       <i className="bi bi-lightning-charge-fill"></i>Buy Now
                     </button>
                   </div>
